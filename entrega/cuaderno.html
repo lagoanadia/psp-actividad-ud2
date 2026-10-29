@@ -148,5 +148,21 @@ limpiador.join(); //lo esperamos.</pre>
       <tr><td>Escribir el registro del día en un fichero</td><td>Al disco</td><td>Espera mucho</td><td><b>Sí.</b> Espera al disco; el servicio sigue mientras se escribe.</td></tr>
     </table>
   </div>
+
+  <div class="caja">
+    <div class="et">18 · Operaciones que no llevan hilo: qué se ganaría y por qué no compensa</div>
+    <p class="lado"><b>Comprobar si una franja está libre</b></p>
+    <ul>
+      <li><b>Qué se ganaría:</b> nada. Es leer una posición de memoria y acaba al instante.</li>
+      <li><b>Por qué no compensa:</b> crear y arrancar un hilo cuesta mucho más que la propia lectura, y habría que esperarlo con <code>join()</code> para saber la respuesta.</li>
+      <li><b>Además:</b> otro hilo más tocando <code>franja[]</code> agrava la carrera de la sección crítica.</li>
+    </ul>
+    <p class="lado"><b>Formatear la fecha de una reserva para la pantalla</b></p>
+    <ul>
+      <li><b>Qué se ganaría:</b> nada. Tarda microsegundos y no espera a nada.</li>
+      <li><b>Por qué no compensa:</b> el hilo tardaría más en crearse que la operación en hacerse.</li>
+      <li><b>Además:</b> la pantalla necesita el resultado ya, así que habría que esperarlo igual.</li>
+    </ul>
+  </div>
 </body>
 </html>
