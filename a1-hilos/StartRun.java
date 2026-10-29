@@ -15,13 +15,19 @@ public class StartRun{
                 }
             }
         };
-       Thread hilo = new Thread(tarea, "hilo-trabajador");
-       hilo.run();
-       tarea.run();
+       Thread hilo1 = new Thread(tarea, "hilo1");
+       Thread hilo2 = new Thread(tarea, "hilo2");
+       Thread hilo3 = new Thread(tarea, "hilo3");
         
+       hilo1.start();
+       hilo2.start();
+       hilo3.start();
+
         try{
-            hilo.join();
-            System.out.println("main: el trabajador ha terminado");
+            hilo1.join();
+            hilo2.join();
+            hilo3.join();
+           System.out.println("main: las 3 tareas han terminado.");
         }catch(InterruptedException e)
         {
             System.out.println(Thread.currentThread().getName()+" ha sido interrumpido");
