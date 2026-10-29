@@ -16,6 +16,8 @@
   .capturas { display: flex; gap: 14px; align-items: flex-start; }
   figure { margin: 0; flex: 1; }
   figure img { width: 100%; border: 1px solid #ccd3da; }
+  .caja p { margin: 0 0 8px; }
+  code { font-family: Consolas, monospace; font-size: 10pt; }
   figcaption { font-size: 9pt; color: #5a6775; margin-top: 4px; font-family: Consolas, monospace; }
 </style>
 </head>
@@ -33,6 +35,13 @@
       <figure><img src="capturas/a1-paso3-start.png"><figcaption>--- con start() ---</figcaption></figure>
       <figure><img src="capturas/a1-paso3-run.png"><figcaption>--- con run() ---</figcaption></figure>
     </div>
+  </div>
+
+
+  <div class="caja">
+    <div class="et">4 · Diferencia entre start() y run() citando las dos salidas</div>
+    <p>Con <code>start()</code> la salida sale entrelazada: <code>main va por 1</code>, <code>hilo-trabajador va por 1</code>, <code>main va por 2</code>… Hay dos hilos trabajando a la vez. <code>start()</code> pone en marcha el <code>hilo-trabajador</code>, que ejecuta la tarea mientras <code>main</code> ejecuta la suya con <code>tarea.run()</code>. Por eso <code>Thread.currentThread().getName()</code> devuelve <code>hilo-trabajador</code> en unas líneas y <code>main</code> en otras: cada hilo que pasa por esa línea obtiene su propio nombre.</p>
+    <p>Con <code>run()</code> todas las líneas dicen <code>main</code> y salen seguidas, sin mezclarse: <code>main va por 1, 2, 3</code> dos veces. <code>run()</code> no crea ningún hilo, es una llamada a un método normal y la ejecuta quien la escribe, que es <code>main</code>. El <code>hilo-trabajador</code> se ha creado pero nunca se ha arrancado, por eso <code>join()</code> vuelve al momento y el mensaje <code>main: el trabajador ha terminado</code> no es cierto: el trabajo lo ha hecho <code>main</code> entero.</p>
   </div>
 
   <h3>Actividad 1.1 · Pasos 5 y 6 · tres hilos sobre la misma tarea</h3>
