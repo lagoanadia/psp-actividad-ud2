@@ -238,15 +238,20 @@ limpiador.join(); //lo esperamos.</pre>
   <div class="caja">
     <div class="et">14 a 16 · Código: el método reservar con la sección crítica marcada</div>
 <pre class="cod">static boolean reservar(int id, String quien) {
+    long t0 = System.nanoTime();
     // SECCIÓN CRÍTICA: empieza aquí
     if (franja[id] == null) { // 1 · comprobar
         franja[id] = quien; // 2 · actuar
         caduca[id] = System.currentTimeMillis() + 900_000; // quince minutos para pagar
         // SECCIÓN CRÍTICA: acaba aquí
+        long t1 = System.nanoTime();
+        traza("seccion critica de reservar: " + (t1 - t0) / 1000.0 + " microsegundos");
         return true;
     }
     return false;
 }</pre>
+    <p style="margin-top:10px">Lo que queda dentro de la sección crítica tarda <b>1,4 microsegundos</b>:</p>
+    <figure style="max-width:85%"><img src="capturas/a2-paso16-medida.png"></figure>
   </div>
 </body>
 </html>
