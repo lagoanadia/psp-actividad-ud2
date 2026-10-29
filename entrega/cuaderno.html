@@ -215,5 +215,11 @@ limpiador.join(); //lo esperamos.</pre>
     <p>Con 2 hilos se perdieron 2.172 primos, con 4 se perdieron 6.452 y con 8 se perdieron 7.305 (frente a los 1.270.607 que da con 1 hilo).</p>
     <p>Con un solo hilo no se pierde ninguno porque nadie más toca <code>total</code>: ese hilo lee, suma y escribe sin que otro se meta en medio. Con varios hilos, todos hacen <code>total++</code> sobre la misma variable compartida, y cuando dos leen el mismo valor a la vez, uno de los incrementos se pisa. Cuantos más hilos, más veces coinciden y más primos se pierden.</p>
   </div>
+
+  <h3>Actividad 2.3 · La reserva: mil intentos</h3>
+  <div class="caja">
+    <div class="et">10 · Carrera.java con Thread.yield(): reservas dobles en 1000 intentos</div>
+    <figure style="max-width:85%"><img src="capturas/a2-paso10-carrera.png"></figure>
+  </div>
 </body>
 </html>
