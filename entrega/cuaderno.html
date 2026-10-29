@@ -233,5 +233,20 @@ limpiador.join(); //lo esperamos.</pre>
     <div class="et">13 · Conclusión con esos dos números</div>
     <p>El fallo está en los dos casos. El <code>yield()</code> no lo crea: solo ensancha el hueco entre comprobar y actuar, y por eso con él salen más dobles. Sin <code>yield</code> el hueco sigue existiendo, es más estrecho, pero aun así se confirmaron dos reservas 647 veces de 1000. Que sea menos probable no significa que no pase: con mil usuarios reservando de verdad, un fallo poco probable acaba pasando seguro.</p>
   </div>
+
+  <h3>Actividad 2.5 · La sección crítica y el inventario</h3>
+  <div class="caja">
+    <div class="et">14 a 16 · Código: el método reservar con la sección crítica marcada</div>
+<pre class="cod">static boolean reservar(int id, String quien) {
+    // SECCIÓN CRÍTICA: empieza aquí
+    if (franja[id] == null) { // 1 · comprobar
+        franja[id] = quien; // 2 · actuar
+        caduca[id] = System.currentTimeMillis() + 900_000; // quince minutos para pagar
+        // SECCIÓN CRÍTICA: acaba aquí
+        return true;
+    }
+    return false;
+}</pre>
+  </div>
 </body>
 </html>

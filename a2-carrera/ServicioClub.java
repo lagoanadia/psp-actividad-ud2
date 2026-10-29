@@ -1,0 +1,64 @@
+import java.util.Date;
+
+public class ServicioClub {
+    static final int FRANJAS = 6; // sábado, de 10:00 a 15:00
+    static final String[] franja = new String[FRANJAS + 1]; // null = libre. SIN PROTEGER todavía
+    static final long[] caduca = new long[FRANJAS + 1]; // cuándo expira cada reserva sin pagar
+    static Thread limpiador;
+
+    static void traza(String msg) {
+        System.out.printf("%tT.%<tL [%s] %s%n", new Date(), Thread.currentThread().getName(), msg);
+    }
+
+    /** Comprobar y actuar: aquí está la sección crítica de toda la unidad. */
+    static boolean reservar(int id, String quien) {
+        // SECCIÓN CRÍTICA: empieza aquí
+        if (franja[id] == null) { // 1 · comprobar
+            franja[id] = quien; // 2 · actuar
+            caduca[id] = System.currentTimeMillis() + 900_000; // quince minutos para pagar
+            // SECCIÓN CRÍTICA: acaba aquí
+            return true;
+        }
+        return false;
+    }
+
+    static void cancelar(int id) { franja[id] = null; }
+
+    /** Una vuelta entera de limpieza: libera lo caducado y no deja nada a medias. */
+    static void limpiar() {
+        traza("vuelta de limpieza: empiezo");
+        for (int i = 1; i <= FRANJAS; i++) {
+            String quien = franja[i];
+            if (quien != null && System.currentTimeMillis() > caduca[i]) {
+                franja[i] = null;
+                traza("franja " + i + " liberada (era de " + quien + ")");
+            }
+            try { Thread.sleep(200); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+        }
+        traza("vuelta de limpieza: termino sin dejar nada a medias");
+    }
+
+    public static void main(String[] args) throws Exception {
+        franja[2] = "ana";   caduca[2] = System.currentTimeMillis() + 500;
+        franja[5] = "bruno"; caduca[5] = System.currentTimeMillis() + 500;
+
+        limpiador = new Thread(() -> {
+            while (!Thread.currentThread().isInterrupted()) {
+                limpiar();
+                try { Thread.sleep(1000); }
+                catch (InterruptedException e) { Thread.currentThread().interrupt(); break; }
+            }
+            traza("limpiador detenido");
+        }, "limpiador");
+        limpiador.setDaemon(true);
+        limpiador.setPriority(Thread.MIN_PRIORITY);
+        // ACTIVIDAD 4: aquí va el gancho de cierre (addShutdownHook)
+        limpiador.start();
+        traza("servicio del club arrancado");
+        Thread.sleep(args.length > 0 ? Long.parseLong(args[0]) : 3000);
+        //Actividad 1.4 Paso 16
+        limpiador.interrupt(); //tras dejar correrlo 3s lo interrumpimos
+        limpiador.join(); //lo esperamos.
+        traza("main termina"); // en la actividad 4, aquí se dispara el gancho
+    }
+}
