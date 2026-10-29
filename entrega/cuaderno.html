@@ -134,5 +134,19 @@ limpiador.join(); //lo esperamos.</pre>
     <div class="et">16 · Captura: la traza del arranque y la parada del servicio</div>
     <figure style="max-width:85%"><img src="capturas/a1-paso16-traza-servicio.png"></figure>
   </div>
+
+  <h3>Actividad 1.5 · Qué lleva hilo y qué no</h3>
+  <div class="caja">
+    <div class="et">17 · Clasificación de las seis operaciones del servicio</div>
+    <table>
+      <tr><th>Operación del club</th><th>A qué espera</th><th>Grupo</th><th>¿Lleva hilo? ¿Por qué?</th></tr>
+      <tr><td>Comprobar si una franja está libre</td><td>A nada: es leer una posición de memoria</td><td>Instantánea</td><td><b>No.</b> No espera a nada; el hilo costaría más que la operación.</td></tr>
+      <tr><td>Liberar las franjas caducadas cada segundo</td><td>Al reloj</td><td>Espera mucho</td><td><b>Sí.</b> Espera al reloj; duerme en segundo plano sin bloquear el servicio.</td></tr>
+      <tr><td>Enviar el correo de confirmación de una reserva</td><td>A un servidor de correo</td><td>Espera mucho</td><td><b>Sí.</b> Espera al servidor de correo; así el usuario no espera con él.</td></tr>
+      <tr><td>Calcular cuántos primos hay en el rango común</td><td>A nada: es CPU pura, pero se trocea</td><td>Calcula mucho</td><td><b>Sí.</b> CPU pura: se reparte entre hilos, uno por núcleo.</td></tr>
+      <tr><td>Formatear la fecha de una reserva para la pantalla</td><td>A nada: microsegundos</td><td>Instantánea</td><td><b>No.</b> Microsegundos; no espera a nada.</td></tr>
+      <tr><td>Escribir el registro del día en un fichero</td><td>Al disco</td><td>Espera mucho</td><td><b>Sí.</b> Espera al disco; el servicio sigue mientras se escribe.</td></tr>
+    </table>
+  </div>
 </body>
 </html>
