@@ -193,5 +193,14 @@ limpiador.join(); //lo esperamos.</pre>
     </ol>
     <p>Los dos hilos ejecutan estos pasos a la vez y pueden mezclarse: si los dos leen el mismo valor antes de que el otro escriba, los dos escriben el mismo resultado y se pierde un incremento. Cuántas veces pasa depende de cómo reparta el sistema operativo el procesador entre los hilos, que cambia en cada ejecución. Por eso cada vez se pierden incrementos distintos y el número final es diferente.</p>
   </div>
+
+  <div class="caja">
+    <div class="et">6 · El entrelazado de los dos hilos que pierde un incremento</div>
+    <div class="capturas">
+      <figure><img src="capturas/a2-paso6-dibujo1.png"></figure>
+      <figure><img src="capturas/a2-paso6-dibujo2.png"></figure>
+      <figure><img src="capturas/a2-paso6-dibujo3.png"></figure>
+    </div>
+  </div>
 </body>
 </html>
