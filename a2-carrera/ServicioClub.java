@@ -12,11 +12,14 @@ public class ServicioClub {
 
     /** Comprobar y actuar: aquí está la sección crítica de toda la unidad. */
     static boolean reservar(int id, String quien) {
+        long t0 = System.nanoTime();
         // SECCIÓN CRÍTICA: empieza aquí
         if (franja[id] == null) { // 1 · comprobar
             franja[id] = quien; // 2 · actuar
             caduca[id] = System.currentTimeMillis() + 900_000; // quince minutos para pagar
             // SECCIÓN CRÍTICA: acaba aquí
+            long t1 = System.nanoTime();
+            traza("seccion critica de reservar: " + (t1 - t0) / 1000.0 + " microsegundos");
             return true;
         }
         return false;
@@ -55,6 +58,7 @@ public class ServicioClub {
         // ACTIVIDAD 4: aquí va el gancho de cierre (addShutdownHook)
         limpiador.start();
         traza("servicio del club arrancado");
+        reservar(3, "carla"); // para medir la sección crítica
         Thread.sleep(args.length > 0 ? Long.parseLong(args[0]) : 3000);
         //Actividad 1.4 Paso 16
         limpiador.interrupt(); //tras dejar correrlo 3s lo interrumpimos
