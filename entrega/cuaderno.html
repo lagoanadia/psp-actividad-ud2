@@ -22,6 +22,10 @@
   .lado { color: #10263f; }
   .concl { border-top: 1px solid #ccd3da; padding-top: 8px; margin-top: 4px !important; }
   code { font-family: Consolas, monospace; font-size: 10pt; }
+  table { border-collapse: collapse; width: 100%; margin: 4px 0 10px; font-size: 10pt; }
+  th { background: #10263f; color: #fff; text-align: left; padding: 5px 8px; }
+  td { border-bottom: 1px solid #ccd3da; padding: 5px 8px; }
+  td.n { text-align: right; font-family: Consolas, monospace; }
   figcaption { font-size: 9pt; color: #5a6775; margin-top: 4px; font-family: Consolas, monospace; }
 </style>
 </head>
@@ -63,6 +67,23 @@
   <div class="caja">
     <div class="et">Captura · la salida: la última línea del main sale la última</div>
     <figure style="max-width:70%"><img src="capturas/a1-paso6-tres-hilos.png"></figure>
+  </div>
+
+  <h3>Actividad 1.3 · El reparto de la UD1, ahora entre hilos</h3>
+  <div class="caja">
+    <div class="et">9 · Medidas con N = 1, 2, 4 y 8 (calentamiento descartado, cinco pasadas, mediana)</div>
+    <p>Portátil de 4 núcleos, con el equipo en reposo.</p>
+    <div class="capturas">
+      <figure><img src="capturas/a1-paso9-medidas-1.png"></figure>
+      <figure><img src="capturas/a1-paso9-medidas-2.png"></figure>
+    </div>
+    <table style="margin-top:10px">
+      <tr><th>N hilos</th><th>Pasadas (ms)</th><th>Mediana (ms)</th><th>total en la mediana</th><th>Primos que faltan</th></tr>
+      <tr><td>1</td><td class="n">25938 · 25973 · 25899 · 25980 · 25797</td><td class="n">25938</td><td class="n">1270607</td><td class="n">0</td></tr>
+      <tr><td>2</td><td class="n">16598 · 16424 · 16516 · 16369 · 16400</td><td class="n">16424</td><td class="n">1268435</td><td class="n">2172</td></tr>
+      <tr><td>4</td><td class="n">8927 · 8927 · 8838 · 8880 · 8938</td><td class="n">8927</td><td class="n">1264155</td><td class="n">6452</td></tr>
+      <tr><td>8</td><td class="n">7199 · 7171 · 7171 · 7174 · 7726</td><td class="n">7174</td><td class="n">1263302</td><td class="n">7305</td></tr>
+    </table>
   </div>
 </body>
 </html>
