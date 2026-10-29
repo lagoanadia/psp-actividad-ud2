@@ -26,6 +26,7 @@
   th { background: #10263f; color: #fff; text-align: left; padding: 5px 8px; }
   td { border-bottom: 1px solid #ccd3da; padding: 5px 8px; }
   td.n { text-align: right; font-family: Consolas, monospace; }
+  pre.cod { background: #f4f6f8; border-left: 3px solid #1f7a8c; padding: 8px 10px; font-family: Consolas, monospace; font-size: 9.5pt; margin: 0; white-space: pre-wrap; }
   figcaption { font-size: 9pt; color: #5a6775; margin-top: 4px; font-family: Consolas, monospace; }
 </style>
 </head>
@@ -118,6 +119,15 @@
   <div class="caja">
     <div class="et">13 · ¿Por qué el trozo 0 termina siempre mucho antes que el último?</div>
     <p>Porque los trozos tienen la misma cantidad de números, pero no el mismo trabajo. <code>esPrimo(x)</code> prueba divisores hasta la raíz de x: con los números pequeños del trozo 0 termina enseguida, y con los números grandes del último trozo (cerca de 20.000.000) tiene que probar muchos más. Repartir el rango en partes iguales no reparte la carga por igual: el trozo 0 acaba pronto y su núcleo se queda sin nada que hacer, mientras el último sigue trabajando, y es ese trozo el que marca el tiempo total.</p>
+  </div>
+
+  <h3>Actividad 1.4 · El servicio del club y su limpiador</h3>
+  <div class="caja">
+    <div class="et">16 · Código: las líneas del main que paran el limpiador y lo esperan</div>
+<pre class="cod">Thread.sleep(args.length &gt; 0 ? Long.parseLong(args[0]) : 3000);
+//Actividad 1.4 Paso 16
+limpiador.interrupt(); //tras dejar correrlo 3s lo interrumpimos
+limpiador.join(); //lo esperamos.</pre>
   </div>
 </body>
 </html>
