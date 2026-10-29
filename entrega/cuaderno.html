@@ -108,5 +108,11 @@
       <li><b>Condiciones:</b> equipo en reposo, con el navegador y el resto de programas cerrados.</li>
     </ul>
   </div>
+
+  <div class="caja">
+    <div class="et">12 · ¿Cuál arranca antes, el reparto entre procesos o entre hilos? ¿Cuál escala mejor?</div>
+    <p>Arranca antes el reparto entre hilos. Crear un hilo es barato porque vive dentro del mismo proceso y comparte su memoria; un proceso tiene que arrancar una JVM nueva. Se ve con N=1: 25.938 ms con hilos frente a 28.010 ms con procesos.</p>
+    <p>Escalan mejor los hilos: con 4 mejoran 2,91x (procesos 2,62x) y con 8 mejoran 3,62x (procesos 2,65x, prácticamente igual que con 4, porque 8 JVM compiten por 4 núcleos y la memoria). Pero los hilos dan un total incorrecto (con 8 faltan 7.305 primos), así que de momento son más rápidos dando un resultado que está mal.</p>
+  </div>
 </body>
 </html>
