@@ -182,5 +182,16 @@ limpiador.join(); //lo esperamos.</pre>
     <div class="et">4 · Captura: las cinco ejecuciones de Contador.java</div>
     <figure style="max-width:85%"><img src="capturas/a2-paso4-contador.png"></figure>
   </div>
+
+  <div class="caja">
+    <div class="et">5 · ¿Por qué salen distintos? Los tres pasos de n++</div>
+    <p>Salen distintos porque <code>contador++</code> no es una sola operación, son tres pasos:</p>
+    <ol style="margin:0 0 8px; padding-left:22px">
+      <li><b>Leer</b> el valor de <code>contador</code>.</li>
+      <li><b>Sumar</b> 1 a ese valor.</li>
+      <li><b>Escribir</b> el resultado en <code>contador</code>.</li>
+    </ol>
+    <p>Los dos hilos ejecutan estos pasos a la vez y pueden mezclarse: si los dos leen el mismo valor antes de que el otro escriba, los dos escriben el mismo resultado y se pierde un incremento. Cuántas veces pasa depende de cómo reparta el sistema operativo el procesador entre los hilos, que cambia en cada ejecución. Por eso cada vez se pierden incrementos distintos y el número final es diferente.</p>
+  </div>
 </body>
 </html>
