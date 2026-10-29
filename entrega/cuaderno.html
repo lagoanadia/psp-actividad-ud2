@@ -253,5 +253,17 @@ limpiador.join(); //lo esperamos.</pre>
     <p style="margin-top:10px">Lo que queda dentro de la sección crítica tarda <b>1,4 microsegundos</b>:</p>
     <figure style="max-width:85%"><img src="capturas/a2-paso16-medida.png"></figure>
   </div>
+
+  <div class="caja">
+    <div class="et">17 · Inventario: métodos del servicio que tocan el mismo estado compartido</div>
+    <table>
+      <tr><th>Método</th><th>Qué toca</th><th>¿Sección crítica?</th></tr>
+      <tr><td><code>reservar(franja, usuario)</code></td><td>Escribe el ocupante de una franja</td><td>Sí</td></tr>
+      <tr><td><code>cancelar(franja)</code></td><td>Borra el ocupante de una franja</td><td>Sí</td></tr>
+      <tr><td><code>limpiar()</code> (el limpiador de la actividad 1)</td><td>Libera las franjas caducadas</td><td>Sí</td></tr>
+      <tr><td><code>estaLibre(franja)</code></td><td>Solo lee</td><td>No</td></tr>
+      <tr><td><code>informeDelDia()</code></td><td>Recorre las seis franjas y las cuenta</td><td>Sí</td></tr>
+    </table>
+  </div>
 </body>
 </html>
