@@ -224,5 +224,14 @@ limpiador.join(); //lo esperamos.</pre>
       <figure><img src="capturas/a2-paso11-sin-yield.png"><figcaption>--- sin Thread.yield() ---</figcaption></figure>
     </div>
   </div>
+
+  <div class="caja">
+    <div class="et">12 · Dobles en mil intentos con yield y sin yield</div>
+    <p>Con <code>yield</code>: 898 dobles de 1000. Sin <code>yield</code>: 647 dobles de 1000.</p>
+  </div>
+  <div class="caja">
+    <div class="et">13 · Conclusión con esos dos números</div>
+    <p>El fallo está en los dos casos. El <code>yield()</code> no lo crea: solo ensancha el hueco entre comprobar y actuar, y por eso con él salen más dobles. Sin <code>yield</code> el hueco sigue existiendo, es más estrecho, pero aun así se confirmaron dos reservas 647 veces de 1000. Que sea menos probable no significa que no pase: con mil usuarios reservando de verdad, un fallo poco probable acaba pasando seguro.</p>
+  </div>
 </body>
 </html>
