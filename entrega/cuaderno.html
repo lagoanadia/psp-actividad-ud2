@@ -355,5 +355,27 @@ static void reservarMal(String quien) {
     <p><code>putIfAbsent</code> hace comprobar y actuar en una sola operación atómica: mira si la franja está vacía y, si lo está, mete al usuario, sin que ningún otro hilo pueda meterse en medio. Por eso solo gana uno: 0 dobles en 1000 intentos.</p>
     <p><code>get</code> seguido de <code>put</code> son dos operaciones. Cada una es segura por separado, pero entre las dos hay un hueco: los dos hilos hacen <code>get</code>, los dos ven la franja vacía y los dos hacen <code>put</code>. Es el mismo comprobar y actuar de la actividad 2, aunque el mapa sea concurrente: 917 dobles en 1000 intentos.</p>
   </div>
+
+  <h3>Actividad 3.3 · El acumulador de primos</h3>
+  <div class="caja">
+    <div class="et">9 · Código: las dos versiones del cuerpo del hilo que cuenta</div>
+<pre class="cod">static final AtomicLong total = new AtomicLong(0);
+
+// Manera 1 · AtomicLong: cada primo encontrado se suma al AtomicLong
+hilos[i] = new Thread(() -&gt; {
+    for (long x = a; x &lt; b; x++) if (esPrimo(x)) total.incrementAndGet();
+}, "trozo-" + i);
+
+// Manera 2 · acumulador local: cada hilo cuenta en su variable y suma una sola vez al final
+hilos[i] = new Thread(() -&gt; {
+    long local = 0;
+    for (long x = a; x &lt; b; x++) if (esPrimo(x)) local++;   // local: sin carrera
+    total.addAndGet(local);                                   // una sola suma por hilo, y atómica
+}, "trozo-" + i);</pre>
+  </div>
+  <div class="caja">
+    <div class="et">10 · Captura: las dos ejecuciones, con su total y su tiempo</div>
+    <figure style="max-width:85%"><img src="capturas/a3-paso10-acumulador.png"></figure>
+  </div>
 </body>
 </html>
