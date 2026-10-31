@@ -349,5 +349,11 @@ static void reservarMal(String quien) {
     <div class="et">7 · ¿A qué versión le quitasteis la protección y cuántos dobles dio?</div>
     <p>A la versión A (bloqueo): sin el <code>synchronized</code> dio 797 dobles en 1000 intentos.</p>
   </div>
+
+  <div class="caja">
+    <div class="et">8 · ¿Por qué putIfAbsent sí y get seguido de put no? Con el número de la prueba</div>
+    <p><code>putIfAbsent</code> hace comprobar y actuar en una sola operación atómica: mira si la franja está vacía y, si lo está, mete al usuario, sin que ningún otro hilo pueda meterse en medio. Por eso solo gana uno: 0 dobles en 1000 intentos.</p>
+    <p><code>get</code> seguido de <code>put</code> son dos operaciones. Cada una es segura por separado, pero entre las dos hay un hueco: los dos hilos hacen <code>get</code>, los dos ven la franja vacía y los dos hacen <code>put</code>. Es el mismo comprobar y actuar de la actividad 2, aunque el mapa sea concurrente: 917 dobles en 1000 intentos.</p>
+  </div>
 </body>
 </html>
