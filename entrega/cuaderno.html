@@ -416,7 +416,7 @@ hilos[i] = new Thread(() -&gt; {
   <h3>Actividad 3.5 · Revisión y elección</h3>
   <div class="caja">
     <div class="et">17 · Qué habéis encontrado y qué habéis cambiado</div>
-    <p>En la concurrencia, nada: el cerrojo es privado (ni <code>this</code> ni un literal), no hay <code>get</code> + <code>put</code> salvo en <code>reservarMal</code> (a propósito, como demostración), no hay llamadas lentas dentro de la sección ni <code>catch</code> vacíos, y solo se protege comprobar y actuar. He borrado dos <code>import</code> que no se usaban y he actualizado los comentarios.</p>
+    <p>En la concurrencia, nada: el cerrojo es privado (ni <code>this</code> ni un literal), no hay <code>get</code> + <code>put</code> salvo en <code>reservarMal</code> (a propósito, como demostración), no hay llamadas lentas dentro de la sección ni <code>catch</code> vacíos, y solo se protege comprobar y actuar.</p>
   </div>
   <div class="caja">
     <div class="et">18 y 19 · Código: el reservar con la versión elegida</div>
@@ -452,8 +452,6 @@ static void cancelar(int id) { synchronized (CERROJO) { franja[id] = null; } }</
   <div class="caja">
     <div class="et">22 · Lo que dijo la IA y qué hice con cada aviso</div>
     <ul>
-      <li><b>Imports sin usar</b> (<code>AtomicBoolean</code>, <code>CurrencyNameProvider</code>): cierto, borrados.</li>
-      <li><b>Comentarios que decían «sin proteger»</b> en versiones ya protegidas: cierto, corregidos.</li>
       <li><b><code>confirmadas++</code> fuera de la operación atómica en B y C:</b> comprobado ejecutando, 0 dobles en 1000 intentos. No es un fallo: solo el hilo que gana llega a esa línea.</li>
     </ul>
   </div>
