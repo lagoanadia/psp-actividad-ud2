@@ -384,5 +384,20 @@ hilos[i] = new Thread(() -&gt; {
     <p>Con el <code>AtomicLong</code>, cada primo encontrado es una operación atómica sobre la misma variable compartida: más de 1,2 millones de veces, con los 4 hilos peleándose por ella. Cada vez que uno la cambia, los demás núcleos tienen que volver a leerla, y eso frena. Con el acumulador local, cada hilo cuenta en su propia variable sin molestar a nadie y solo toca la compartida una vez al final: 4 operaciones atómicas en total en vez de 1,2 millones.</p>
     <p>La diferencia no es mayor porque la mayor parte del tiempo se va en <code>esPrimo</code>, no en sumar.</p>
   </div>
+
+  <h3>Actividad 3.4 · El banco de carga y el límite de cada versión</h3>
+  <div class="caja">
+    <div class="et">12 · Banco.java: 8 hilos × 250.000 operaciones, calentamiento descartado, cinco pasadas y mediana</div>
+    <figure><img src="capturas/a3-paso12-banco.png"></figure>
+  </div>
+  <div class="caja">
+    <div class="et">13 · Tabla del banco de carga</div>
+    <table>
+      <tr><th>Versión</th><th>Tiempo (mediana)</th><th>Correcto</th><th>Su límite</th></tr>
+      <tr><td>A · synchronized</td><td class="n">26 ms</td><td>Sí (2.000.000)</td><td>Si dentro del bloque se mete algo lento, como enviar el correo de confirmación, todos los demás hilos se quedan esperando. Y no protege nada si otro método toca <code>franja[]</code> sin usar el mismo cerrojo.</td></tr>
+      <tr><td>B · atómica</td><td class="n">30 ms</td><td>Sí (2.000.000)</td><td>Solo protege una variable: no puede ocupar la franja y poner su caducidad (<code>franja[]</code> y <code>caduca[]</code>) como una sola operación.</td></tr>
+      <tr><td>C · mapa concurrente</td><td class="n">182 ms</td><td>Sí (2.000.000)</td><td>Cada operación es atómica sobre una sola clave: no puede reservar dos franjas juntas (las dos o ninguna).</td></tr>
+    </table>
+  </div>
 </body>
 </html>
