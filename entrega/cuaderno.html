@@ -289,5 +289,51 @@ limpiador.join(); //lo esperamos.</pre>
     <div class="et">Voto antes de escribir código (A bloqueo, B atómica o C colección concurrente)</div>
     <p>C</p>
   </div>
+
+  <h3>Actividad 3.1 · Tres versiones de la reserva</h3>
+  <div class="caja">
+    <div class="et">1 a 4 · Código: los cuatro métodos de reserva (A, B, C y el de get + put)</div>
+<pre class="cod">private static final Object CERROJO = new Object();
+static final AtomicReference&lt;String&gt; franja = new AtomicReference&lt;&gt;();
+static final ConcurrentHashMap&lt;Integer,String&gt; mapa = new ConcurrentHashMap&lt;&gt;();
+
+// Versión A · bloqueo
+static void reservarA(String quien) {
+    synchronized(CERROJO)
+    {
+        if (usuario == null) { // 1 · comprobar
+            Thread.yield(); // 2 · la ventana, ensanchada a propósito
+            usuario = quien; // 3 · actuar
+            confirmadas++;
+        }
+    }
+}
+
+// Versión B · atómica
+static void reservarB(String quien) {
+    if(franja.compareAndSet(null, quien))
+    {
+        confirmadas++;
+    }
+}
+
+// Versión C · colección concurrente
+static void reservarC(String quien) {
+    if(mapa.putIfAbsent(1, quien)==null)
+    {
+        confirmadas++;
+    }
+}
+
+// La que parece correcta y no lo es: get + put
+static void reservarMal(String quien) {
+    if (mapa.get(1) == null)
+    {
+        Thread.yield();
+        mapa.put(1, quien);
+        confirmadas++;
+    }
+}</pre>
+  </div>
 </body>
 </html>
