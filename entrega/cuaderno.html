@@ -377,5 +377,12 @@ hilos[i] = new Thread(() -&gt; {
     <div class="et">10 · Captura: las dos ejecuciones, con su total y su tiempo</div>
     <figure style="max-width:85%"><img src="capturas/a3-paso10-acumulador.png"></figure>
   </div>
+
+  <div class="caja">
+    <div class="et">11 · ¿Se nota la diferencia de tiempo entre las dos? ¿Por qué?</div>
+    <p>Sí, aunque no mucho: con 4 hilos, el <code>AtomicLong</code> tardó 12.702 ms y el acumulador local 11.839 ms, unos 900 ms menos.</p>
+    <p>Con el <code>AtomicLong</code>, cada primo encontrado es una operación atómica sobre la misma variable compartida: más de 1,2 millones de veces, con los 4 hilos peleándose por ella. Cada vez que uno la cambia, los demás núcleos tienen que volver a leerla, y eso frena. Con el acumulador local, cada hilo cuenta en su propia variable sin molestar a nadie y solo toca la compartida una vez al final: 4 operaciones atómicas en total en vez de 1,2 millones.</p>
+    <p>La diferencia no es mayor porque la mayor parte del tiempo se va en <code>esPrimo</code>, no en sumar.</p>
+  </div>
 </body>
 </html>
