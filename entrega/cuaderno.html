@@ -459,5 +459,43 @@ static void cancelar(int id) { synchronized (CERROJO) { franja[id] = null; } }</
     <div class="et">23 · ¿Mantenéis el voto del principio? ¿Por qué?</div>
     <p>No. Voté C, pero elijo A: las tres dan 0 dobles, pero la reserva del club toca dos datos juntos y mañana podría tener que confirmar dos franjas a la vez, y eso solo lo cubre el bloqueo.</p>
   </div>
+
+  <h2>Actividad 4 · Cuando nadie avanza</h2>
+  <h3>Actividad 4.1 · Reproducir el cuelgue</h3>
+  <div class="caja">
+    <div class="et">1 · Predicción: de diez ejecuciones de GestorReservas, ¿cuántas se van a colgar?</div>
+    <p>4</p>
+  </div>
+<!--A4-GESTOR-->
+  <h3>Actividad 4.4 · El gancho de cierre, las prioridades y el caso feo</h3>
+  <div class="caja">
+    <div class="et">10 y 11 · Código: el gancho de cierre y las líneas de prioridades y demonios</div>
+<pre class="cod">limpiador.setDaemon(true);
+limpiador.setPriority(Thread.MIN_PRIORITY);
+// ACTIVIDAD 4: gancho de cierre
+Runtime.getRuntime().addShutdownHook(new Thread(() -&gt; {
+    traza("apagando: interrumpo el limpiador");
+    limpiador.interrupt();
+    try {
+        limpiador.join(3000); // espera con límite: una vuelta tarda ~1,2 s
+        traza(limpiador.isAlive() ? "NO terminó en 3 s" : "limpiador detenido y unido");
+    } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+    traza("servicio apagado");
+}, "gancho-cierre"));</pre>
+  </div>
+<!--A4-CAPTURAS-->
+  <div class="caja">
+    <div class="et">14 · ¿Qué garantiza exactamente la prioridad mínima del limpiador?</div>
+    <p>Nada seguro: es una sugerencia al planificador. Le pide que, si varios hilos compiten por la CPU, prefiera a los demás antes que al limpiador. No garantiza que vaya el último ni ningún orden, y el sistema operativo puede ignorarla.</p>
+  </div>
+  <div class="caja">
+    <div class="et">15 · ¿Por qué ese límite de espera y no diez veces más ni diez veces menos?</div>
+    <p>Una vuelta de limpieza tarda unos 1,2 s (6 franjas × 200 ms). Con 3 s el limpiador tiene tiempo de sobra para terminar la vuelta en curso. Con 0,3 s se cortaría a medias; con 30 s, si el limpiador se queda colgado, el apagado tardaría medio minuto en avisar.</p>
+  </div>
+  <h3>Actividad 4.5 · Dos cerrojos a la vez</h3>
+  <div class="caja">
+    <div class="et">16 · ¿Se toman en algún sitio dos cerrojos a la vez?</div>
+    <p>No. El servicio tiene un solo cerrojo (<code>CERROJO</code>) y ningún método toma dos, así que no puede cerrarse un círculo de espera. Si el club creciera con un cerrojo por franja y hubiera que reservar dos franjas juntas, se tomarían siempre en el mismo orden, por número de franja, igual que en <code>Corregido.java</code>.</p>
+  </div>
 </body>
 </html>
