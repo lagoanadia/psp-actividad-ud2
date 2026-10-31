@@ -399,5 +399,67 @@ hilos[i] = new Thread(() -&gt; {
       <tr><td>C · mapa concurrente</td><td class="n">182 ms</td><td>Sí (2.000.000)</td><td>Cada operación es atómica sobre una sola clave: no puede reservar dos franjas juntas (las dos o ninguna).</td></tr>
     </table>
   </div>
+
+  <div class="caja">
+    <div class="et">14 · Método y condiciones de la medida</div>
+    <ul>
+      <li><b>Equipo:</b> HP Envy x360, Windows 11 Home, 7,39 GB de RAM, 4 núcleos, Java 21.0.12.</li>
+      <li><b>Método:</b> 8 hilos × 250.000 operaciones (2.000.000 por versión), una pasada de calentamiento descartada, cinco pasadas y la mediana. Ejecutado con <code>java Banco.java</code> desde la terminal de VS Code.</li>
+      <li><b>Abierto:</b> nada más.</li>
+    </ul>
+  </div>
+  <div class="caja">
+    <div class="et">15 · Reservar dos franjas juntas (las dos o ninguna): ¿cuál sirve?</div>
+    <p>Solo la A (bloqueo). Dentro del mismo <code>synchronized</code> se comprueba que las dos franjas están libres y se ocupan las dos, sin que nadie se meta en medio. La atómica y el mapa concurrente solo hacen atómica una operación sobre un dato o una clave: podrían ocupar una franja y fallar en la otra.</p>
+  </div>
+
+  <h3>Actividad 3.5 · Revisión y elección</h3>
+  <div class="caja">
+    <div class="et">17 · Qué habéis encontrado y qué habéis cambiado</div>
+    <p>En la concurrencia, nada: el cerrojo es privado (ni <code>this</code> ni un literal), no hay <code>get</code> + <code>put</code> salvo en <code>reservarMal</code> (a propósito, como demostración), no hay llamadas lentas dentro de la sección ni <code>catch</code> vacíos, y solo se protege comprobar y actuar. He borrado dos <code>import</code> que no se usaban y he actualizado los comentarios.</p>
+  </div>
+  <div class="caja">
+    <div class="et">18 y 19 · Código: el reservar con la versión elegida</div>
+<pre class="cod">private static final Object CERROJO = new Object(); // la llave de la sección crítica
+
+static boolean reservar(int id, String quien) {
+    synchronized (CERROJO) {
+        if (franja[id] == null) { // 1 · comprobar
+            franja[id] = quien; // 2 · actuar
+            caduca[id] = System.currentTimeMillis() + 900_000; // quince minutos para pagar
+            return true;
+        }
+        return false;
+    }
+}
+
+static void cancelar(int id) { synchronized (CERROJO) { franja[id] = null; } }</pre>
+  </div>
+  <div class="caja">
+    <div class="et">19 · Captura: la prueba de mil intentos en verde</div>
+    <figure style="max-width:85%"><img src="capturas/a3-paso5-protegidas.png"></figure>
+  </div>
+  <div class="caja">
+    <div class="et">20 · Por qué esa versión, qué deja fuera y qué cambiaría si el club creciera</div>
+    <ul>
+      <li><b>Por qué:</b> reservar toca dos datos juntos (<code>franja[]</code> y <code>caduca[]</code>), y solo el bloqueo protege los dos a la vez; en el banco, además, fue la más rápida (26 ms).</li>
+      <li><b>Qué deja fuera:</b> si se mete algo lento dentro (el correo), todos esperan; y cualquier método que toque las franjas tiene que usar el mismo cerrojo.</li>
+      <li><b>Si el club creciera:</b> un cerrojo por franja en vez de uno para todas, para que reservas de franjas distintas no se esperen entre sí.</li>
+    </ul>
+  </div>
+
+  <h3>Actividad 3.6 · Revisión con IA y el voto</h3>
+  <div class="caja">
+    <div class="et">22 · Lo que dijo la IA y qué hice con cada aviso</div>
+    <ul>
+      <li><b>Imports sin usar</b> (<code>AtomicBoolean</code>, <code>CurrencyNameProvider</code>): cierto, borrados.</li>
+      <li><b>Comentarios que decían «sin proteger»</b> en versiones ya protegidas: cierto, corregidos.</li>
+      <li><b><code>confirmadas++</code> fuera de la operación atómica en B y C:</b> comprobado ejecutando, 0 dobles en 1000 intentos. No es un fallo: solo el hilo que gana llega a esa línea.</li>
+    </ul>
+  </div>
+  <div class="caja">
+    <div class="et">23 · ¿Mantenéis el voto del principio? ¿Por qué?</div>
+    <p>No. Voté C, pero elijo A: las tres dan 0 dobles, pero la reserva del club toca dos datos juntos y mañana podría tener que confirmar dos franjas a la vez, y eso solo lo cubre el bloqueo.</p>
+  </div>
 </body>
 </html>
